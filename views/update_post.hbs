@@ -1,4 +1,4 @@
-{{{#extends "base"}}
+{{#extends "base"}}
 
 {{#block "title"}}
 Update
@@ -10,16 +10,77 @@ Update a Smithy Work Order
 
 {{#block "content"}}
 <div class="container">
-<form class=".offset-1" method="GET" action="/update/">
+  <form class=".offset-1" method="GET">
     <div class="form-floating mb-3">
       <select class="form-select" id="orderSelect" aria-label="Order Select" name="order_id">
         {{#each orders}}
-          <option value={{order_id}}>{{order_id}}</option>
+        <option value={{order_id}} {{#if_eq order_id ../selectedOrder}} selected {{/if_eq}}>{{order_id}}</option>
         {{/each}}
       </select>
       <label for="orderSelect">Please select an order</label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Select</button>
+  </form>
+</div>
+<hr>
+<div class="container">
+  <form class=".offset-1" method="POST">
+    <div class="form-floating mb-3">
+      <select class="form-select" id="orderSelected" aria-label="Order Selected" name="order_id" disabled>
+        {{#each orders}}
+        <option value={{order_id}} {{#if_eq order_id ../selectedOrder}} selected {{/if_eq}}>{{order_id}}</option>  
+        {{/each}}
+      </select>
+      <label for="orderSelected">Selected Order:</label>
+    </div>
+    <div>
+      <input type="hidden" name="order_id" value={{order.order_id}}>
+    </div>
+    <div class="form-group mb-2">
+      <label for="postedInput">Datetime Posted:</label>
+      <input type="datetime-local" class="form-control" id="postedInput" value={{order.posted}} disabled>
+    </div>
+    <div class="form-group mb-2">
+      <label for="completeByInput">Complete By:</label>
+      <input type="date" class="form-control" id="completeByInput" name="complete_by" value={{order.complete_by}}>
+    </div>
+    <label for="smithSelect" class="form-label">Assigned Smith:</label>
+    <select class="form-select mb-2" id="smithSelect" aria-label="Smith Select" name="smith_id">
+      {{#each smiths}}
+      <option value={{smith_id}} {{#if_eq smith_id ../order.smith_id}} selected {{/if_eq}}>{{name}}</option>
+      {{/each}}
+    </select>
+    <label for="templateSelect" class="form-label">Template:</label>
+    <select class="form-select mb-2" id="templateSelect" aria-label="Template Select" name="template_id">
+      {{#each templates}}
+      <option value={{template_id}} {{#if_eq template_id ../order.template_id}} selected {{/if_eq}}>[{{template_id}}]
+        {{name}}</option>
+      {{/each}}
+    </select>
+    <label for="MaterialSelect" class="form-label">Material:</label>
+    <select class="form-select mb-2" id="materialSelect" aria-label="Material Select" name="material_id">
+      {{#each materials}}
+      <option value={{material_id}} {{#if_eq material_id ../order.material_id}} selected {{/if_eq}}>[{{material_id}}]
+        {{name}}</option>
+      {{/each}}
+    </select>
+    <label for="customerSelect" class="form-label">Customer:</label>
+    <select class="form-select mb-2" id="customerSelect" aria-label="Customer Select" name="customer_id">
+      {{#each customers}}
+      <option value={{customer_id}} {{#if_eq customer_id ../order.customer_id}} selected {{/if_eq}}>[{{customer_id}}]
+        {{name}}</option>
+      {{/each}}
+    </select>
+    <div class="form-group mb-2">
+      <label for="completedInput">Completed At:</label>
+      <input type="datetime-local" class="form-control" id="completedAtInput" name="completed_at"
+        value={{order.completed_at}}>
+    </div>
+      <div class="form-floating mb-3">
+      <textarea class="form-control" id="floatingTextarea" name="remarks" style="height:100px">{{order.remarks}}</textarea>
+      <label for="floatingTextarea">Remarks</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
   </form>
 </div>
 {{/block}}

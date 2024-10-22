@@ -1,0 +1,39 @@
+{{#extends "base"}}
+
+{{#block "title"}}
+Delete
+{{/block}}
+
+{{#block "content header"}}
+Delete a Smithy Work Order
+{{/block}}
+
+{{#block "content"}}
+<div class="container">
+  <form class=".offset-1" method="POST">
+    <div class="alert alert-danger">
+      <h5>
+        Are you sure you want to delete order ID: {{order.order_id}}?
+      </h5>
+      <hr>
+      <p>
+        Posted: {{order.posted}}<br>
+        Completed By: {{order.complete_by}}<br>
+        Completed At: {{order.completed_at}}<br>
+        Assigned To: {{order.smithname}}<br>
+        Template: {{order.templatename}}<br>
+        Material: {{order.material}}<br>
+        Customer ID: {{ order.customer_id}}<br>
+        Remarks:<br>
+        {{order.remarks}}
+      </p>
+    </div>
+    <div>
+      <input type="submit" value="Confirm" class="btn btn-danger mt-3" />
+      <a href="/customers" class="btn btn-success mt-3">Cancel</a>
+    </div>
+  </form>
+</div>
+{{/block}}
+
+{{/extends}}

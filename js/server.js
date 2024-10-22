@@ -12,6 +12,14 @@ require("handlebars-helpers")({
   handlebars: hbs.handlebars
 });
 
+// handlebars-helper not working?
+hbs.registerHelper('if_eq', function(a, b, opts) {
+  if(a == b)
+      return opts.fn(this);
+  else
+      return opts.inverse(this);
+});
+
 //allow serving static files
 app.use(express.static("public"));
 
@@ -28,6 +36,7 @@ wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
 
 function dateToMySqlDate(date) {
+  if(!date || isNaN(date.getTime())) return undefined;
   return `${date.getFullYear()}-` +
          `${String(date.getMonth()+1).padStart(2,'0')}-` +
          `${String(date.getDate()).padStart(2,'0')}`;
@@ -38,6 +47,19 @@ function dateToMySqlDatetime(date) {
          `${String(date.getHours()).padStart(2,'0')}:` +
          `${String(date.getMinutes()).padStart(2,'0')}:` +
          `${String(date.getSeconds()).padStart(2,'0')}`;
+}
+
+function dateToHtmlDate(date) {
+  if(!date || isNaN(date.getTime())) return undefined;
+  return `${date.getFullYear()}` +
+         `-${String(date.getMonth()).padStart(2, 0)}` +
+         `-${String(date.getDate()).padStart(2,0)}`;
+}
+
+function dateToHtmlDatetime(date) {
+  return `${dateToHtmlDate(date)}` +
+         `T${String(date.getHours()).padStart(2,'0')}` + 
+         `:${String(date.getMinutes()).padStart(2,'0')}`;
 }
 
 async function main() {
@@ -175,12 +197,21 @@ async function main() {
     const data = { "orders" : orders };
 
     if(order_id) {
-      const [order] = await connection.execute(`
+      const [order] = (await connection.execute(`
         SELECT *
         FROM orders
         WHERE order_id = ${order_id}
-      ;`);
-      data.order = order[0];
+      ;`))[0];
+
+      order.posted = dateToHtmlDatetime(order.posted);
+      order.complete_by = dateToHtmlDate(order.complete_by);
+      if(order.completed_at) {
+        order.completed_at = dateToHtmlDatetime(order.completed_at);
+      } else {
+        order.completed_at = dateToHtmlDatetime(new Date(0));
+      }
+
+      data.order = order;
       const [smiths] = await connection.execute(`
         SELECT smith_id, name
         FROM smiths
@@ -197,16 +228,71 @@ async function main() {
         SELECT customer_id, name
         FROM customers
       ;`);
+
+      data.selectedOrder = Number(order_id);
       data.smiths = smiths;
       data.templates = templates;
       data.materials = materials;
       data.customers = customers;
+      console.log(data);
+      res.render("update_post", data);
+      return;
     }
-    console.log(`data`, data);
     res.render("update_get", data);
   });
 
+  app.post("/update", async (req, res) => {
+    const { complete_by, smith_id, template_id, order_id,
+            material_id, customer_id, remarks } = req.body;
+    const completed_at =
+      req.body.completed_at.length == 0 ? null : req.body.completed_at;
 
+    const query = `UPDATE ORDERS 
+                   SET complete_by = ?, smith_id = ?, template_id = ?,
+                       material_id = ?, customer_id = ?, completed_at = ?,
+                       remarks = ?
+                   WHERE order_id = ?;`;
+    const values = [
+      dateToMySqlDate(new Date(complete_by)), smith_id, 
+      template_id, material_id, customer_id, 
+      completed_at ? dateToMySqlDatetime(new Date(completed_at)): null,
+      remarks, order_id
+    ];
+    await connection.execute(query, values);
+    res.redirect("../read");
+  });
+
+  app.get("/delete/:order_id", async (req, res) => {
+    const order_id = req.params.order_id;
+    const [order] = (await connection.execute(`
+      SELECT order_id,
+              posted,
+              complete_by,
+              completed_at,
+              smiths.name AS smithname,
+              templates.name AS templatename,
+              materials.name AS materialname,
+              customer_id,
+              remarks
+      FROM orders 
+      JOIN smiths ON orders.smith_id = smiths.smith_id
+      JOIN templates ON orders.template_id = templates.template_id
+      JOIN materials ON orders.material_id = materials.material_id
+      WHERE order_id = ${order_id};
+    `))[0];
+
+    res.render("delete", {"order" : order});
+  });
+
+  app.post("/delete/:order_id", async (req, res) => {
+    const order_id = req.params.order_id;
+    const query = `
+      DELETE FROM orders
+      WHERE order_id = ?
+    ;`;
+    await connection.execute(query, [order_id]);
+    res.redirect("../read");
+  });
 };
 
 main();
