@@ -1,0 +1,39 @@
+{{#extends "base"}}
+
+{{#block "title"}}
+Customers
+{{/block}}
+
+{{#block "content header"}}
+Smithy's Customers Listings
+{{/block}}
+
+{{#block "content"}}
+<div class="container">
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Contact/th>
+      <th>Address</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each customers}}
+    <tr>
+      <td>{{this.customer_id}}</td>
+      <td>{{this.name}}</td>
+      <td>{{this.contact}}</td>
+      <td>{{this.address}}</td>
+      <td>{{this.email}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+  </div>
+</div>
+{{/block}}
+
+{{/extends}}

@@ -1,0 +1,72 @@
+{{#extends "base"}}
+
+{{#block "title"}}
+Read
+{{/block}}
+
+{{#block "content header"}}
+Post a Smithy Work Order
+{{/block}}
+
+{{#block "content"}}
+<div class="container">
+  <form class=".offset-1" method="POST">
+    <div class="mb-1">
+      <label for="customerName" class="form-label">Name</label>
+      <input type="text" name="name" class="form-control" id="customerName" value="Risteárd Servius">
+    </div>
+    <div class="mb-2">
+      <label for="customerContact" class="form-label">Contact</label>
+      <input type="text" name="contact" class="form-control" id="customerContact" aria-describedby="contactHelp"
+        value="(555) 123-4567">
+      <div id="contactHelp" class="form-text">Please provide a contact so we could reach you.</div>
+    </div>
+    <div class="mb-3">
+      <label for="customerEmail" class="form-label">Email Address</label>
+      <input type="email" name="email" class="form-control" id="customerEmail" aria-describedby="emailHelp"
+        value="example.user123@example.com">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+      <div class="mb-3">
+      <label for="customerAddr" class="form-label">Delivery Address</label>
+      <input type="text" name="address" class="form-control" id="customerAddr" aria-describedby="addrHelp"
+        value="123 Fake Street, Imaginary City, FAK 1234">
+      <div id="addrHelp" class="form-text">This is where we will send your order!</div>
+    </div>
+    <div class="form-floating mb-3">
+      <select class="form-select" id="templateSelect" aria-label="Template Select" name="template_id">
+        {{#each templates}}
+          <option value={{template_id}}>{{name}}</option>
+        {{/each}}
+      </select>
+      <label for="materialSelect">Please select a material</label>
+    </div>
+    <div class="form-floating mb-3">
+      <select class="form-select" id="materialSelect" aria-label="Material Select" name="material_id">
+        {{#each materials}}
+          <option value={{material_id}}>{{name}}</option>
+        {{/each}}
+      </select>
+      <label for="materialSelect">Please select a material</label>
+    </div>
+    <div class="form-floating mb-3">
+      <textarea class="form-control" id="floatingTextarea" name="remarks" style="height:100px"></textarea>
+      <label for="floatingTextarea">Remarks</label>
+    </div>
+
+            <div class="form-group">
+                <label for="dateInput">Select a date:</label>
+                <input type="date" class="form-control" id="dateInput" name="dateInput">
+            </div>
+
+            <div class="form-group">
+                <label for="datetimeInput">Select date and time:</label>
+                <input type="datetime-local" class="form-control" id="datetimeInput" name="datetimeInput" value="2024-10-22T10:30">
+            </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{{/block}}
+
+{{/extends}}

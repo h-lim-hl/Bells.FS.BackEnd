@@ -1,0 +1,27 @@
+{{{#extends "base"}}
+
+{{#block "title"}}
+Update
+{{/block}}
+
+{{#block "content header"}}
+Update a Smithy Work Order
+{{/block}}
+
+{{#block "content"}}
+<div class="container">
+<form class=".offset-1" method="GET" action="/update/">
+    <div class="form-floating mb-3">
+      <select class="form-select" id="orderSelect" aria-label="Order Select" name="order_id">
+        {{#each orders}}
+          <option value={{order_id}}>{{order_id}}</option>
+        {{/each}}
+      </select>
+      <label for="orderSelect">Please select an order</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{{/block}}
+
+{{/extends}}
