@@ -10,39 +10,38 @@ Smithy's Order Listings
 
 {{#block "content"}}
 <div class="container">
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Posted</th>
-      <th>Complete By</th>
-      <th>Completed At</th>
-      <th>Smith</th>
-      <th>Template</th>
-      <th>Material</th>
-      <th>Customer ID</th>
-      <th>Remarks</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each orders}}
-    <tr>
-      <td>{{this.order_id}}</td>
-      <td>{{this.posted}}</td>
-      <td>{{this.complete_by}}</td>
-      <td>{{this.completed_at}}</td>
-      <td>{{this.smithname}}</td>
-      <td>{{this.templatename}}</td>
-      <td>{{this.materialname}}</td>
-      <td>{{this.customer_id}}</td>
-      <td>{{this.remarks}}</td>
-      <td>
-        <a href="/delete/{{order_id}}" class="btn btn-danger btn-sm">Del</a>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
-  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Posted</th>
+        <th>Complete By</th>
+        <th>Completed At</th>
+        <th>Smith</th>
+        <th>Template</th>
+        <th>Material</th>
+        <th>Customer ID</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each orders}}
+      <tr>
+        <td>{{this.order_id}}</td>
+        <td>{{this.posted}}</td>
+        <td>{{this.complete_by}}</td>
+        <td>{{this.completed_at}}</td>
+        <td>{{this.smithname}}</td>
+        <td>{{this.templatename}}</td>
+        <td>{{this.materialname}}</td>
+        <td>{{this.customer_id}}</td>
+        <td>{{this.remarks}}</td>
+        <td>
+          <a href="/delete/{{order_id}}" class="btn btn-danger btn-sm">Del</a>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
 </div>
 {{/block}}
 

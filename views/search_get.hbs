@@ -1,0 +1,69 @@
+{{#extends "base"}}
+
+{{#block "title"}}
+Search Work Order
+{{/block}}
+
+{{#block "content"}}
+<div class="container">
+  <form class+".offset-1">
+    <div class="form-floating mb-3">
+      <select class="form-select" id="templateSelect" aria-label="Template Select" name="template_id">
+        {{#each templates}}
+        <option value={{template_id}} {{#if_eq template_id ../selectedTemplate}} selected {{/if_eq}}>{{name}}</option>
+        {{/each}}
+      </select>
+      <label for="templateSelect">Please select a template</label>
+    </div>
+    <div class="form-floating mb-3">
+      <select class="form-select" id="materialSelect" aria-label="Material Select" name="material_id">
+        {{#each materials}}
+        <option value={{material_id}} {{#if_eq material_id ../selectedMaterial}} selected {{/if_eq}}>{{name}}</option>
+        {{/each}}
+      </select>
+      <label for="materialSelect">Please select a material</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<hr>
+{{#if_notUndefNull results}}
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Posted</th>
+        <th>Complete By</th>
+        <th>Completed At</th>
+        <th>Smith</th>
+        <th>Template</th>
+        <th>Material</th>
+        <th>Customer ID</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each results}}
+      <tr>
+        <td>{{this.order_id}}</td>
+        <td>{{this.posted}}</td>
+        <td>{{this.complete_by}}</td>
+        <td>{{this.completed_at}}</td>
+        <td>{{this.smithname}}</td>
+        <td>{{this.templatename}}</td>
+        <td>{{this.materialname}}</td>
+        <td>{{this.customer_id}}</td>
+        <td>{{this.remarks}}</td>
+        <td>
+          <a href="/delete/{{order_id}}" class="btn btn-danger btn-sm">Del</a>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</div>
+{{/if_notUndefNull}}
+{{/block}}
+
+{{/extends}}
