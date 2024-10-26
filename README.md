@@ -22,8 +22,7 @@ backend application should solve the business needs of a stakeholder.
 
 ### Back End Development
 - In your project, you must be able to demonstrate, for one table:
-  - At least two SELECT statements. One of the statements must have to
-be able to filter the table by at least two criteria.
+  - At least two SELECT statements. One of the statements must have to be able to filter the table by at least two criteria.
   - Perform at least one INSERT INTO statement on the table
   - Perform at least one UPDATE statement on the table
   - Perform at least one DELETE statement on the table
